@@ -31,15 +31,15 @@ impl Args {
     pub fn usage() {
         println!(
             r#"Simple Client
-Usage:
-  -h, --help   Show help
-  --url [url]  Url to connect to (default: {})"#,
+            Usage:
+            -h, --help   Show help
+            --url [url]  Url to connect to (default: {})"#,
             DEFAULT_URL
         );
     }
 }
 
-const DEFAULT_URL: &str = "opc.tcp://desktop-mdfo08g:57888/OpcExpert";
+const DEFAULT_URL: &str = "opc.tcp://127.0.0.1:4855";
 
 fn main() -> Result<(), ()> {
     // Read command line arguments
@@ -70,7 +70,7 @@ fn main() -> Result<(), ()> {
             ),
             IdentityToken::Anonymous,
         ) {
-            if let Err(result) = subscribe_to_variables(session.clone(), 3) {
+            if let Err(result) = subscribe_to_variables(session.clone(), 2) {
                 println!(
                     "ERROR: Got an error while subscribing to variables - {}",
                     result
@@ -104,7 +104,7 @@ fn subscribe_to_variables(session: Arc<RwLock<Session>>, ns: u16) -> Result<(), 
     println!("Created a subscription with id = {}", subscription_id);
 
     // Create some monitored items
-    let items_to_create: Vec<MonitoredItemCreateRequest> = ["DESKTOP-MDFO08G->EEI.OPCSimulator->SimDevice.AE-301_Flow"]
+    let items_to_create: Vec<MonitoredItemCreateRequest> = ["v1", "v2", "v3", "v4"]
         .iter()
         .map(|v| NodeId::new(ns, *v).into())
         .collect();
